@@ -1,0 +1,90 @@
+{{define "content"}}
+<h1>Administração de ACL</h1>
+<p>admin tem sempre acesso total, sem precisar de concessão. Os restantes roles
+   começam sem nenhum acesso até lhes ser concedida uma área aqui.</p>
+
+<div class="cae-card">
+    <h2>Conceder acesso a um utilizador</h2>
+    <form action="/admin/acl/grant" method="post">
+        <input type="hidden" name="subject_type" value="user">
+        <div class="cae-form-group">
+            <label for="user_subject_id">Utilizador</label>
+            <select class="cae-select" id="user_subject_id" name="subject_id" required>
+                {{range .Users}}
+                <option value="{{.ID}}">{{.Email}} ({{.Role}})</option>
+                {{end}}
+            </select>
+        </div>
+        <div class="cae-form-group">
+            <label for="user_app">Aplicação / área</label>
+            <select class="cae-select" id="user_app" name="area_key" required onchange="this.form.app.value=this.options[this.selectedIndex].dataset.app">
+                {{range .Areas}}
+                <option value="{{.Key}}" data-app="{{.App}}">{{.App}} — {{.Label}}</option>
+                {{end}}
+            </select>
+            <input type="hidden" name="app" value="{{if .Areas}}{{(index .Areas 0).App}}{{end}}">
+        </div>
+        <button class="cae-btn" type="submit">Conceder</button>
+    </form>
+</div>
+
+<div class="cae-card">
+    <h2>Conceder acesso a um role</h2>
+    <form action="/admin/acl/grant" method="post">
+        <input type="hidden" name="subject_type" value="role">
+        <div class="cae-form-group">
+            <label for="role_subject_id">Role</label>
+            <select class="cae-select" id="role_subject_id" name="subject_id" required>
+                {{range .Roles}}
+                <option value="{{.}}">{{.}}</option>
+                {{end}}
+            </select>
+        </div>
+        <div class="cae-form-group">
+            <label for="role_app">Aplicação / área</label>
+            <select class="cae-select" id="role_app" name="area_key" required onchange="this.form.app.value=this.options[this.selectedIndex].dataset.app">
+                {{range .Areas}}
+                <option value="{{.Key}}" data-app="{{.App}}">{{.App}} — {{.Label}}</option>
+                {{end}}
+            </select>
+            <input type="hidden" name="app" value="{{if .Areas}}{{(index .Areas 0).App}}{{end}}">
+        </div>
+        <button class="cae-btn" type="submit">Conceder</button>
+    </form>
+</div>
+
+<div class="cae-card">
+    <h2>Concessões atuais</h2>
+    <div style="overflow-x: auto;">
+        <table class="cae-table">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Destinatário</th>
+                    <th>Aplicação</th>
+                    <th>Área</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Grants}}
+                <tr>
+                    <td>{{.SubjectType}}</td>
+                    <td>{{.SubjectID}}</td>
+                    <td>{{.App}}</td>
+                    <td>{{.AreaKey}}</td>
+                    <td>
+                        <form action="/admin/acl/revoke/{{.ID}}" method="post" onsubmit="return confirm('Revogar este acesso?');">
+                            <button class="cae-btn cae-btn--danger" type="submit">Revogar</button>
+                        </form>
+                    </td>
+                </tr>
+                {{end}}
+                {{if not .Grants}}
+                <tr><td colspan="5">Nenhuma concessão registada.</td></tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

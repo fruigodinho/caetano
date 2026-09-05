@@ -1,0 +1,10 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "sql/queries"
+    schema: "sql/schema.sql"
+    gen:
+      go:
+        package: "postgres"
+        out: "internal/adapter/storage/postgres"
+        sql_package: "database/sql"

@@ -1,0 +1,113 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Upload de balancete</h1>
+</div>
+
+<div class="cae-card" style="max-width: 560px; margin: 0 auto;">
+    <div class="cae-upload-zone" id="upload-zone">
+        <p>Clique para selecionar um ficheiro CSV</p>
+        <input type="file" id="file" accept=".csv" required>
+    </div>
+    <div class="cae-upload-zone__info" id="file-info" hidden></div>
+
+    <p class="cae-text-muted" style="font-size: 13px; margin-top: var(--cae-space-3);">
+        O ficheiro deve ser um CSV (separador ";") com as colunas Número Conta,
+        Designação, Saldo. Os dados devem começar na linha 5.
+    </p>
+
+    <div class="cae-progress" id="progress-container" hidden>
+        <div class="cae-progress__labels">
+            <span id="progress-status">A iniciar...</span>
+            <span id="progress-percent">0%</span>
+        </div>
+        <div class="cae-progress__track">
+            <div class="cae-progress__fill" id="progress-bar"></div>
+        </div>
+    </div>
+
+    <div id="message-container"></div>
+
+    <div style="margin-top: var(--cae-space-4); text-align: right;">
+        <button type="button" class="cae-btn" id="submit-btn" disabled>Processar ficheiro</button>
+    </div>
+</div>
+
+<script src="/saldos-esperados/assets/js/upload.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var fileInput = document.getElementById("file");
+        var fileInfo = document.getElementById("file-info");
+        var submitBtn = document.getElementById("submit-btn");
+        var progressContainer = document.getElementById("progress-container");
+        var progressBar = document.getElementById("progress-bar");
+        var progressStatus = document.getElementById("progress-status");
+        var progressPercent = document.getElementById("progress-percent");
+        var messageContainer = document.getElementById("message-container");
+        var selectedFile = null;
+
+        fileInput.addEventListener("change", function () {
+            var file = fileInput.files[0];
+            if (!file) return;
+            if (!file.name.toLowerCase().endsWith(".csv")) {
+                fail(new Error("Por favor selecione um ficheiro CSV."));
+                fileInput.value = "";
+                submitBtn.disabled = true;
+                fileInfo.hidden = true;
+                return;
+            }
+            selectedFile = file;
+            fileInfo.hidden = false;
+            fileInfo.textContent = "Ficheiro selecionado: " + file.name;
+            submitBtn.disabled = false;
+        });
+
+        submitBtn.addEventListener("click", function () {
+            if (!selectedFile) return;
+            submitBtn.disabled = true;
+            submitBtn.textContent = "A processar...";
+            progressContainer.hidden = false;
+            messageContainer.innerHTML = "";
+            setProgress(0, "A ler ficheiro...");
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    var parsed = window.caeUploadCSV.parseCSVContent(e.target.result);
+                    window.caeUploadCSV
+                        .uploadEntries(selectedFile.name, parsed.label, parsed.entries, setProgress)
+                        .then(function () {
+                            setTimeout(function () {
+                                window.location.href = "/saldos-esperados/dashboard";
+                            }, 800);
+                        })
+                        .catch(fail);
+                } catch (err) {
+                    fail(err);
+                }
+            };
+            reader.onerror = function () {
+                fail(new Error("Erro ao ler o ficheiro."));
+            };
+            reader.readAsText(selectedFile, "ISO-8859-1");
+        });
+
+        function setProgress(percent, status) {
+            var p = Math.round(percent);
+            progressBar.style.width = p + "%";
+            progressPercent.textContent = p + "%";
+            progressStatus.textContent = status;
+        }
+
+        function fail(err) {
+            progressContainer.hidden = true;
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Processar ficheiro";
+            var alertEl = document.createElement("div");
+            alertEl.className = "cae-alert cae-alert--danger";
+            alertEl.textContent = err.message;
+            messageContainer.innerHTML = "";
+            messageContainer.appendChild(alertEl);
+        }
+    });
+</script>
+{{end}}

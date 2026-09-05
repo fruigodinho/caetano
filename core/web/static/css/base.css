@@ -1,0 +1,69 @@
+/* caetano — reset e tokens base. Vanilla CSS, sem framework/CDN. */
+
+:root {
+    --cae-color-primary: #2563eb;
+    --cae-color-primary-dark: #1d4ed8;
+    --cae-color-success: #16a34a;
+    --cae-color-warning: #d97706;
+    --cae-color-danger: #dc2626;
+
+    --cae-gray-50: #f8fafc;
+    --cae-gray-100: #f1f5f9;
+    --cae-gray-200: #e2e8f0;
+    --cae-gray-300: #cbd5e1;
+    --cae-gray-500: #64748b;
+    --cae-gray-700: #334155;
+    --cae-gray-900: #0f172a;
+
+    --cae-radius: 8px;
+    --cae-radius-sm: 4px;
+    --cae-shadow: 0 1px 3px rgba(15, 23, 42, 0.1), 0 1px 2px rgba(15, 23, 42, 0.06);
+    --cae-space-1: 4px;
+    --cae-space-2: 8px;
+    --cae-space-3: 16px;
+    --cae-space-4: 24px;
+    --cae-space-5: 32px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--cae-gray-900);
+    background: var(--cae-gray-50);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+a {
+    color: var(--cae-color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1, h2, h3, h4 {
+    margin: 0 0 var(--cae-space-3);
+    font-weight: 600;
+    color: var(--cae-gray-900);
+}
+
+.cae-main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--cae-space-5) var(--cae-space-4);
+}
+
+.cae-body--bare .cae-main,
+.cae-body--bare {
+    max-width: none;
+}

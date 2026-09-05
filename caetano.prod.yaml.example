@@ -1,0 +1,24 @@
+app:
+  port: "8080"
+
+# IMPORTANTE: quem torna isto "produção" é a variável de ambiente GIN_MODE=release
+# (ver scripts/caetano.service.example), não este ficheiro. dev.auto_login_email
+# NUNCA é lido quando GIN_MODE=release/ENV=production — o campo nem chega a ser
+# desserializado para a config em produção. Não definir aqui.
+
+# Server de produção acede-se por ssh postgres-pgvector
+db:
+  dsn: "postgres://caetano:REPLACE_ME@92.168.200.115:5432/caetano?sslmode=require"
+
+cloudflare:
+  team_domain: "<team>.cloudflareaccess.com"
+  aud: "<application-audience-tag>"
+
+dropbox:
+  app_key: ""
+  app_secret: ""
+  refresh_token: ""
+  path: "/CaetanoBackups"
+
+encryption:
+  key: ""             # 32 bytes para AES-256-GCM — gerar por ambiente, nunca reaproveitar do dev

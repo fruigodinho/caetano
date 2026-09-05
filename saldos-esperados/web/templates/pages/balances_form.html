@@ -1,0 +1,34 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>{{if .IsEdit}}Editar{{else}}Novo{{end}} saldo esperado</h1>
+    <a href="/saldos-esperados/balances" class="cae-btn cae-btn--secondary">← Voltar</a>
+</div>
+
+{{if .Error}}<div class="cae-alert cae-alert--danger">{{.Error}}</div>{{end}}
+
+<div class="cae-card" style="max-width: 640px;">
+    <form action="/saldos-esperados/balances" method="POST">
+        <div class="cae-form-group">
+            <label for="account_number">Número de conta</label>
+            <input class="cae-input" type="text" id="account_number" name="account_number" value="{{.Balance.AccountNumber}}" required {{if .IsEdit}}readonly{{end}}>
+        </div>
+
+        <div class="cae-form-group">
+            <label for="account_name">Designação da conta</label>
+            <input class="cae-input" type="text" id="account_name" name="account_name" value="{{.Balance.AccountName}}" required>
+        </div>
+
+        <div class="cae-form-group">
+            <label for="expected_balance_type">Tipo de saldo esperado</label>
+            <select class="cae-select" id="expected_balance_type" name="expected_balance_type" required>
+                <option value="">Selecione...</option>
+                {{range .Types}}
+                <option value="{{.Code}}" {{if eq .Code $.Balance.ExpectedBalanceType}}selected{{end}}>{{.Code}} - {{.ShortDescription}}</option>
+                {{end}}
+            </select>
+        </div>
+
+        <button type="submit" class="cae-btn">💾 Gravar</button>
+    </form>
+</div>
+{{end}}

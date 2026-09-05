@@ -1,0 +1,14 @@
+{{define "content"}}
+<div class="cae-card" style="max-width: 480px; margin: 0 auto;">
+    <h1>Conversor CSV → XML</h1>
+    <p>Carregue um ficheiro CSV para o converter para o formato XML da DRI.</p>
+
+    <form action="/xmldri/csv" method="post" enctype="multipart/form-data">
+        <div class="cae-form-group">
+            <label for="csvfile">Ficheiro CSV</label>
+            <input class="cae-input" type="file" id="csvfile" name="csvfile" accept=".csv" required>
+        </div>
+        <button class="cae-btn" type="submit">Converter</button>
+    </form>
+</div>
+{{end}}

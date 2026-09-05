@@ -1,0 +1,59 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Histórico de processamentos</h1>
+</div>
+
+{{if .Error}}<div class="cae-alert cae-alert--danger">{{.Error}}</div>{{end}}
+
+<div class="cae-card">
+    <div style="overflow-x: auto;">
+        <table class="cae-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Ficheiro</th>
+                    <th>Rótulo</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Uploads}}
+                <tr>
+                    <td>#{{.ID}}</td>
+                    <td>{{.UploadDate.UTC.Format "02/01/2006 15:04"}}</td>
+                    <td>{{.Filename}}</td>
+                    <td>{{.Label.String}}</td>
+                    <td>
+                        {{if eq .Status "processed"}}
+                        <span class="cae-badge cae-badge--success">Processado</span>
+                        {{else if eq .Status "failed"}}
+                        <span class="cae-badge cae-badge--danger">Falhou</span>
+                        {{else}}
+                        <span class="cae-badge">{{.Status}}</span>
+                        {{end}}
+                    </td>
+                    <td>
+                        <a href="/saldos-esperados/history/{{.ID}}/download" class="cae-btn" style="padding: 4px 10px;">⬇️ Excel</a>
+                    </td>
+                </tr>
+                {{end}}
+                {{if not .Uploads}}
+                <tr><td colspan="6" class="cae-empty-state">Nenhum processamento encontrado.</td></tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+
+    {{if gt .TotalPages 1}}
+    <div class="cae-pagination">
+        <span>Página {{.Page}} de {{.TotalPages}}</span>
+        <div class="cae-pagination__links">
+            {{if gt .Page 1}}<a href="/saldos-esperados/history?page={{.PrevPage}}" class="cae-btn cae-btn--secondary">Anterior</a>{{end}}
+            {{if lt .Page .TotalPages}}<a href="/saldos-esperados/history?page={{.NextPage}}" class="cae-btn cae-btn--secondary">Próxima</a>{{end}}
+        </div>
+    </div>
+    {{end}}
+</div>
+{{end}}

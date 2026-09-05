@@ -1,0 +1,100 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Saldos esperados</h1>
+    <div style="display: flex; gap: var(--cae-space-2);">
+        <a href="/saldos-esperados/balances/new" class="cae-btn">➕ Novo saldo</a>
+        <button type="button" class="cae-btn cae-btn--secondary" onclick="document.getElementById('import-modal').hidden = false">📥 Importar Excel</button>
+    </div>
+</div>
+
+{{if .Error}}<div class="cae-alert cae-alert--danger">{{.Error}}</div>{{end}}
+{{if .Msg}}<div class="cae-alert cae-alert--success">{{.Msg}}</div>{{end}}
+
+<form method="GET" action="/saldos-esperados/balances" class="cae-filters">
+    <div class="cae-form-group">
+        <label for="search">Pesquisar</label>
+        <input class="cae-input" type="text" id="search" name="q" value="{{.Search}}" placeholder="Conta ou nome... (* e ? como wildcards)">
+    </div>
+    <div class="cae-form-group">
+        <label for="type-filter">Tipo</label>
+        <select class="cae-select" id="type-filter" name="type">
+            <option value="">Todos os tipos</option>
+            {{range .Types}}
+            <option value="{{.Code}}" {{if eq $.TypeFilter .Code}}selected{{end}}>{{.Code}} - {{.ShortDescription}}</option>
+            {{end}}
+        </select>
+    </div>
+    <button type="submit" class="cae-btn">🔍 Filtrar</button>
+    {{if or .Search .TypeFilter}}<a href="/saldos-esperados/balances" class="cae-btn cae-btn--secondary">✕ Limpar</a>{{end}}
+</form>
+
+<div class="cae-card">
+    <div style="overflow-x: auto;">
+        <table class="cae-table">
+            <thead>
+                <tr>
+                    <th>Conta</th>
+                    <th>Designação</th>
+                    <th>Tipo esperado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Balances}}
+                <tr>
+                    <td>{{.AccountNumber}}</td>
+                    <td>{{.AccountName}}</td>
+                    <td><span class="cae-badge">{{.ExpectedBalanceType}}</span></td>
+                    <td>
+                        <div style="display: flex; gap: var(--cae-space-2);">
+                            <a href="/saldos-esperados/balances/{{.AccountNumber}}" class="cae-btn cae-btn--secondary" style="padding: 4px 10px;">✏️ Editar</a>
+                            <form action="/saldos-esperados/balances/{{.AccountNumber}}/delete" method="POST" style="margin: 0;"
+                                onsubmit="return confirm('Tem a certeza?');">
+                                <button type="submit" class="cae-btn cae-btn--danger" style="padding: 4px 10px;">🗑️ Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {{end}}
+                {{if not .Balances}}
+                <tr><td colspan="4" class="cae-empty-state">Nenhum saldo esperado encontrado.</td></tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+
+    {{if gt .TotalPages 1}}
+    <div class="cae-pagination">
+        <span>Página {{.Page}} de {{.TotalPages}}</span>
+        <div class="cae-pagination__links">
+            {{if gt .Page 1}}
+            <a href="/saldos-esperados/balances?page={{.PrevPage}}&q={{.Search}}&type={{.TypeFilter}}" class="cae-btn cae-btn--secondary">Anterior</a>
+            {{end}}
+            {{if lt .Page .TotalPages}}
+            <a href="/saldos-esperados/balances?page={{.NextPage}}&q={{.Search}}&type={{.TypeFilter}}" class="cae-btn cae-btn--secondary">Próxima</a>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+</div>
+
+<div id="import-modal" class="cae-overlay" hidden>
+    <div class="cae-overlay__card" style="max-width: 440px; text-align: left;">
+        <h3 style="margin-top: 0;">📥 Importar Excel</h3>
+        <p class="cae-text-muted" style="font-size: 13px;">
+            Ficheiro .xlsx com as colunas Conta, Designação, Tipo. A importação
+            sincroniza os dados: cria novos, atualiza existentes e remove os que
+            não estiverem no ficheiro.
+        </p>
+        <form action="/saldos-esperados/balances/import" method="POST" enctype="multipart/form-data">
+            <div class="cae-form-group">
+                <input class="cae-input" type="file" name="file" accept=".xlsx" required>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: var(--cae-space-2);">
+                <button type="button" class="cae-btn cae-btn--secondary" onclick="document.getElementById('import-modal').hidden = true">Cancelar</button>
+                <button type="submit" class="cae-btn">📥 Importar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,48 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>{{if .IsEdit}}Editar{{else}}Novo{{end}} tipo de saldo</h1>
+    <a href="/saldos-esperados/types" class="cae-btn cae-btn--secondary">← Voltar</a>
+</div>
+
+{{if .Error}}<div class="cae-alert cae-alert--danger">{{.Error}}</div>{{end}}
+
+<div class="cae-card" style="max-width: 640px;">
+    <form action="/saldos-esperados/types" method="POST">
+        <input type="hidden" name="is_edit" value="{{.IsEdit}}">
+
+        <div class="cae-form-group">
+            <label for="code">Código</label>
+            <input class="cae-input" type="text" id="code" name="code" value="{{.Type.Code}}" required {{if .IsEdit}}readonly{{end}}>
+        </div>
+
+        <div class="cae-form-group">
+            <label for="short_description">Descrição curta</label>
+            <input class="cae-input" type="text" id="short_description" name="short_description" value="{{.Type.ShortDescription}}" required>
+        </div>
+
+        <div class="cae-form-group">
+            <label for="column_indicator">Indicador de coluna</label>
+            <input class="cae-input" type="text" id="column_indicator" name="column_indicator" value="{{.Type.ColumnIndicator}}" required>
+        </div>
+
+        <div class="cae-form-group">
+            <label for="validation_rule">Regra de validação</label>
+            <select class="cae-select" id="validation_rule" name="validation_rule" required>
+                {{$current := .Type.ValidationRule}}
+                <option value="credit_only" {{if eq $current "credit_only"}}selected{{end}}>Só crédito</option>
+                <option value="debit_only" {{if eq $current "debit_only"}}selected{{end}}>Só débito</option>
+                <option value="both_separate" {{if eq $current "both_separate"}}selected{{end}}>Ambos, separados</option>
+                <option value="both_net" {{if eq $current "both_net"}}selected{{end}}>Ambos, líquido</option>
+                <option value="both_before_transfer" {{if eq $current "both_before_transfer"}}selected{{end}}>Ambos, antes de transferência</option>
+            </select>
+        </div>
+
+        <div class="cae-form-group">
+            <label for="full_description">Descrição completa</label>
+            <textarea class="cae-input" id="full_description" name="full_description" rows="4">{{.Type.FullDescription}}</textarea>
+        </div>
+
+        <button type="submit" class="cae-btn">💾 Gravar</button>
+    </form>
+</div>
+{{end}}

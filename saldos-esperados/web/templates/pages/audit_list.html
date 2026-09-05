@@ -1,0 +1,87 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Auditoria</h1>
+</div>
+
+<form method="GET" action="/saldos-esperados/audit" class="cae-filters">
+    <div class="cae-form-group">
+        <label for="username">Email</label>
+        <input class="cae-input" type="text" id="username" name="username" value="{{.Username}}" placeholder="Email...">
+    </div>
+    <div class="cae-form-group">
+        <label for="action">Ação</label>
+        <select class="cae-select" id="action" name="action">
+            <option value="">Todas</option>
+            <option value="LOGIN" {{if eq .Action "LOGIN"}}selected{{end}}>LOGIN</option>
+            <option value="LOGOUT" {{if eq .Action "LOGOUT"}}selected{{end}}>LOGOUT</option>
+            <option value="CREATE" {{if eq .Action "CREATE"}}selected{{end}}>CREATE</option>
+            <option value="UPDATE" {{if eq .Action "UPDATE"}}selected{{end}}>UPDATE</option>
+            <option value="DELETE" {{if eq .Action "DELETE"}}selected{{end}}>DELETE</option>
+            <option value="UPLOAD" {{if eq .Action "UPLOAD"}}selected{{end}}>UPLOAD</option>
+            <option value="IMPORT" {{if eq .Action "IMPORT"}}selected{{end}}>IMPORT</option>
+        </select>
+    </div>
+    <div class="cae-form-group">
+        <label for="entity">Entidade</label>
+        <select class="cae-select" id="entity" name="entity">
+            <option value="">Todas</option>
+            <option value="USER" {{if eq .Entity "USER"}}selected{{end}}>USER</option>
+            <option value="BALANCE" {{if eq .Entity "BALANCE"}}selected{{end}}>BALANCE</option>
+            <option value="TYPE" {{if eq .Entity "TYPE"}}selected{{end}}>TYPE</option>
+            <option value="UPLOAD" {{if eq .Entity "UPLOAD"}}selected{{end}}>UPLOAD</option>
+        </select>
+    </div>
+    <button type="submit" class="cae-btn">🔍 Pesquisar</button>
+    {{if or .Username .Action .Entity}}<a href="/saldos-esperados/audit" class="cae-btn cae-btn--secondary">✕ Limpar</a>{{end}}
+</form>
+
+<div class="cae-card">
+    {{if .Error}}<div class="cae-alert cae-alert--danger">{{.Error}}</div>{{end}}
+
+    <div style="overflow-x: auto;">
+        <table class="cae-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Utilizador</th>
+                    <th>Ação</th>
+                    <th>Entidade</th>
+                    <th>ID entidade</th>
+                    <th>Detalhes</th>
+                    <th>IP</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Logs}}
+                <tr>
+                    <td>{{.CreatedAt.UTC.Format "02/01/2006 15:04:05"}}</td>
+                    <td>{{if .UserEmail}}{{.UserEmail}}{{else}}Sistema{{end}}</td>
+                    <td><span class="cae-badge">{{.Action}}</span></td>
+                    <td>{{.Entity}}</td>
+                    <td>{{.EntityID.String}}</td>
+                    <td class="cae-text-muted" style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{.Details.String}}">{{.Details.String}}</td>
+                    <td>{{.IpAddress.String}}</td>
+                </tr>
+                {{end}}
+                {{if not .Logs}}
+                <tr><td colspan="7" class="cae-empty-state">Nenhum registo encontrado.</td></tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+
+    {{if gt .TotalPages 1}}
+    <div class="cae-pagination">
+        <span>Página {{.CurrentPage}} de {{.TotalPages}}</span>
+        <div class="cae-pagination__links">
+            {{if gt .CurrentPage 1}}
+            <a href="/saldos-esperados/audit?page={{sub .CurrentPage 1}}&username={{.Username}}&action={{.Action}}&entity={{.Entity}}" class="cae-btn cae-btn--secondary">Anterior</a>
+            {{end}}
+            {{if lt .CurrentPage .TotalPages}}
+            <a href="/saldos-esperados/audit?page={{add .CurrentPage 1}}&username={{.Username}}&action={{.Action}}&entity={{.Entity}}" class="cae-btn cae-btn--secondary">Próxima</a>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+</div>
+{{end}}

@@ -1,0 +1,34 @@
+# Unidade systemd de referência para o caetano.
+#
+# Instalação (no servidor):
+#   sudo cp caetano.service.example /etc/systemd/system/caetano.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now caetano
+#
+# IMPORTANTE: GIN_MODE=release é a fonte de verdade de core/config.IsProduction()
+# (não o campo app.mode do YAML) — é o que impede estruturalmente o autologin de
+# dev de ativar em produção (RF-3). Nunca remover esta linha nem definir
+# GIN_MODE=debug num serviço de produção.
+
+[Unit]
+Description=caetano - portal xmldri + saldos-esperados
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=caetano-app
+Group=caetano-app
+WorkingDirectory=/opt/caetano
+ExecStart=/opt/caetano/caetano -config /opt/caetano/caetano.prod.yaml
+Environment=GIN_MODE=release
+Restart=on-failure
+RestartSec=5
+
+# Endurecimento básico (opcional, ajustar conforme a distro/kernel do host)
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/caetano
+
+[Install]
+WantedBy=multi-user.target

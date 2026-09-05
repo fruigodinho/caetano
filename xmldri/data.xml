@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?> <dr xmlns="http://www.at.gov.pt/2019/DRIVAWeb/schema" version="1.0"> <rosto> <quadro01> <f1>504639668</f1> </quadro01> <quadro02> <f1>1</f1> </quadro02> <quadro03> <f1>2024</f1> <f2>02</f2> </quadro03> <quadro0405> 
+         <f10>0</f10> <f17>1925300</f17> <f18>0</f18> <f19>0</f19> <table>
+            <tableItem> <f2>ES</f2> <f3>01463504Z</f3> <f4>600</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>06575925H</f3> <f4>5900</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>15876911B</f3> <f4>19600</f4> <f5>4</f5> </tableItem> 
+            <tableItem>
+               <f2>ES</f2> <f3>17712126X</f3> <f4>9900</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>23267176P</f3> <f4>4500</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>32389373Z</f3> <f4>4100</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>34745754E</f3> <f4>5700</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>53545375H</f3> <f4>100</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>71161664D</f3> <f4>12200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>74160837M</f3> <f4>13500</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>75446786R</f3> <f4>3700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A03047628</f3> <f4>7200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A04065645</f3> <f4>15300</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>A12052213</f3> <f4>25800</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>A17070285</f3> <f4>1700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A17106832</f3> <f4>3600</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A18212282</f3> <f4>2400</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>A24326373</f3> <f4>33700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A30062566</f3> <f4>3300</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A31326598</f3> <f4>200</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>A32004160</f3> <f4>2200</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>A33022765</f3> <f4>3100</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A33581158</f3> <f4>2400</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A36011112</f3> <f4>61100</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>A36629020</f3> <f4>646300</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A37003043</f3> <f4>1100</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A39000575</f3> <f4>58300</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>A43049527</f3> <f4>5400</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>A45444502</f3> <f4>1600</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A48181929</f3> <f4>16900</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A50107937</f3> <f4>11700</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>A62957303</f3> <f4>2200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A79141099</f3> <f4>50500</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>A80124712</f3> <f4>5000</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>A80170368</f3> <f4>5600</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>A81569121</f3> <f4>8600</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B02275550</f3> <f4>6200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B02944684</f3> <f4>900</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B03320645</f3> <f4>17000</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B05480389</f3> <f4>7900</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B06207484</f3> <f4>1100</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B10813038</f3> <f4>1000</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B10871606</f3> <f4>7500</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B13025424</f3> <f4>12700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B15066764</f3> <f4>8700</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B15204373</f3> <f4>8600</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B16685380</f3> <f4>8500</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B16881187</f3> <f4>1800</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B18933226</f3> <f4>11900</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B19135151</f3> <f4>9200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B19219286</f3> <f4>38400</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B21239959</f3> <f4>12000</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B21512207</f3> <f4>38300</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B22183438</f3> <f4>4500</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B24579609</f3> <f4>5000</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B26225961</f3> <f4>3400</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B27184878</f3> <f4>31800</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B27212422</f3> <f4>12900</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B27389592</f3> <f4>35000</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B28545994</f3> <f4>2000</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B29648649</f3> <f4>9200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B30491419</f3> <f4>1400</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B30686331</f3> <f4>2400</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B31185275</f3> <f4>29900</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B32202384</f3> <f4>10700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B33385428</f3> <f4>2600</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B33614041</f3> <f4>5400</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B34217372</f3> <f4>13200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B34285189</f3> <f4>1000</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B36162402</f3> <f4>58300</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B36182194</f3> <f4>18100</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B37509353</f3> <f4>10200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B39394564</f3> <f4>3900</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B41261330</f3> <f4>36700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B42001644</f3> <f4>12100</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B42126227</f3> <f4>7400</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B42139725</f3> <f4>16200</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B43677392</f3> <f4>3200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B45308541</f3> <f4>200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B47391164</f3> <f4>500</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B47689302</f3> <f4>61200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B48853493</f3> <f4>5900</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B50932771</f3> <f4>1200</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B53165841</f3> <f4>3500</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B53994471</f3> <f4>13800</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B54365325</f3> <f4>500</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B54915830</f3> <f4>12500</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B61074514</f3> <f4>1700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B61089645</f3> <f4>9000</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B61291001</f3> <f4>23300</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B67700211</f3> <f4>2200</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B70621123</f3> <f4>17500</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B72702897</f3> <f4>700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B72724172</f3> <f4>1400</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B79321840</f3> <f4>8100</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B79365789</f3> <f4>400</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B82180563</f3> <f4>200</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B82624073</f3> <f4>700</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B84658657</f3> <f4>5000</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B87170064</f3> <f4>4900</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B87220042</f3> <f4>36400</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>B87956751</f3> <f4>11000</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B88369293</f3> <f4>18700</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>B91582494</f3> <f4>12300</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>B96019187</f3> <f4>600</f4> <f5>4</f5>
+            </tableItem> <tableItem> <f2>ES</f2> <f3>B98855257</f3> <f4>5000</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>E14501498</f3> <f4>1600</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>E88423934</f3> <f4>9900</f4> <f5>4</f5> 
+            </tableItem> <tableItem>
+               <f2>ES</f2> <f3>F14640619</f3> <f4>23200</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>F32494353</f3> <f4>15100</f4> <f5>4</f5> </tableItem> <tableItem> <f2>ES</f2> <f3>J93668861</f3> <f4>21800</f4> <f5>4</f5> </tableItem> <tableItem> 
+               <f2>ES</f2> <f3>Z0599659P</f3> <f4>12100</f4> <f5>4</f5>
+            </tableItem> </table> </quadro0405> <quadro06> <f1>168179237</f1> </quadro06> <quadro07> <table/> </quadro07> </rosto> </dr>

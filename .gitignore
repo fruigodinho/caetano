@@ -1,0 +1,9 @@
+/bin/
+/caetano.dev.yaml
+/caetano.prod.yaml
+*.env
+systemd.env
+.env
+.env.local
+.env.production
+*.log

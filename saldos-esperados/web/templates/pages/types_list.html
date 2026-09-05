@@ -1,0 +1,44 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Tipos de saldo</h1>
+    <a href="/saldos-esperados/types/new" class="cae-btn">➕ Novo tipo</a>
+</div>
+
+<div class="cae-card">
+    <div style="overflow-x: auto;">
+        <table class="cae-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição curta</th>
+                    <th>Indicador</th>
+                    <th>Regra</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Types}}
+                <tr>
+                    <td><span class="cae-badge">{{.Code}}</span></td>
+                    <td>{{.ShortDescription}}</td>
+                    <td>{{.ColumnIndicator}}</td>
+                    <td class="cae-text-muted">{{.ValidationRule}}</td>
+                    <td>
+                        <div style="display: flex; gap: var(--cae-space-2);">
+                            <a href="/saldos-esperados/types/{{.Code}}" class="cae-btn cae-btn--secondary" style="padding: 4px 10px;">✏️ Editar</a>
+                            <form action="/saldos-esperados/types/{{.Code}}/delete" method="POST" style="margin: 0;"
+                                onsubmit="return confirm('Tem a certeza que deseja apagar este tipo?');">
+                                <button type="submit" class="cae-btn cae-btn--danger" style="padding: 4px 10px;">🗑️ Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {{end}}
+                {{if not .Types}}
+                <tr><td colspan="5" class="cae-empty-state">Nenhum tipo de saldo registado.</td></tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

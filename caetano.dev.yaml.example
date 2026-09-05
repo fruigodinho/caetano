@@ -1,0 +1,25 @@
+app:
+  port: "8080"
+
+# Sem GIN_MODE/ENV definidos no ambiente, IsProduction()=false — é isso que ativa
+# o bypass do Cloudflare Access e a leitura de dev.auto_login_email abaixo.
+
+## Server db deve acede-se por ssh postgres
+db:
+  dsn: "postgres://caetano:caetano@192.168.200.11:5432/caetano?sslmode=disable"
+
+cloudflare:
+  team_domain: ""     # <team>.cloudflareaccess.com — vazio em dev (bypass ativo)
+  aud: ""
+
+dev:
+  auto_login_email: "admin@example.com"  # só lido se GIN_MODE!=release e ENV!=production
+
+dropbox:
+  app_key: ""
+  app_secret: ""
+  refresh_token: ""
+  path: "/CaetanoBackups"
+
+encryption:
+  key: ""             # 32 bytes para AES-256-GCM

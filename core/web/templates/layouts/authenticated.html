@@ -1,0 +1,28 @@
+{{define "authenticated"}}<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{if .Title}}{{.Title}} · {{end}}caetano - contabilidade</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+</head>
+<body class="cae-body">
+    <header class="cae-topbar">
+        <a class="cae-topbar__brand" href="/"><span class="cae-topbar__logo">C</span>caetano - contabilidade</a>
+        <nav class="cae-topbar__nav">
+            {{range .Nav}}<a href="{{.Href}}" class="cae-topbar__link">{{if .Icon}}{{.Icon}} {{end}}{{.Label}}</a>{{end}}
+        </nav>
+        <div class="cae-topbar__user">
+            {{if .CurrentUser}}<span class="cae-topbar__email">{{.CurrentUser.Email}}</span>{{end}}
+            {{if .LogoutURL}}<a class="cae-topbar__logout" href="{{.LogoutURL}}">Sair</a>{{end}}
+        </div>
+    </header>
+    <main class="cae-main">
+        {{block "content" .}}{{end}}
+    </main>
+    <script src="/static/js/app.js" defer></script>
+</body>
+</html>
+{{end}}

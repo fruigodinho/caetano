@@ -1,0 +1,45 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Importar do Dropbox</h1>
+    <a href="/saldos-esperados/data" class="cae-btn cae-btn--secondary">← Voltar</a>
+</div>
+
+<div class="cae-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--cae-space-3);">
+        <span class="cae-text-muted" id="status-text" style="font-size: 13px;">A aguardar...</span>
+        <button class="cae-btn cae-btn--secondary" id="btn-refresh">Atualizar lista</button>
+    </div>
+
+    <div id="loading-state" class="cae-empty-state" hidden>A carregar ficheiros...</div>
+    <div id="empty-state" class="cae-empty-state" hidden>Nenhum ficheiro CSV encontrado na pasta da app no Dropbox.</div>
+
+    <div id="table-container" hidden style="overflow-x: auto;">
+        <table class="cae-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Tamanho</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="file-list-body"></tbody>
+        </table>
+    </div>
+
+    <div id="error-container" class="cae-alert cae-alert--danger" hidden style="margin-top: var(--cae-space-3);"></div>
+</div>
+
+<div id="progress-overlay" class="cae-overlay" hidden>
+    <div class="cae-overlay__card">
+        <h3 id="processing-filename" style="margin: 0 0 var(--cae-space-3);">ficheiro.csv</h3>
+        <div class="cae-progress__track">
+            <div class="cae-progress__fill" style="width: 60%;"></div>
+        </div>
+        <p class="cae-text-muted" style="font-size: 13px; margin-top: var(--cae-space-3);">
+            Por favor aguarde, isto pode demorar alguns segundos.
+        </p>
+    </div>
+</div>
+
+<script src="/saldos-esperados/assets/js/dropbox-import.js"></script>
+{{end}}

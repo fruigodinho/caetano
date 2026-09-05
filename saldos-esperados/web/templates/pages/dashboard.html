@@ -1,0 +1,24 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Dashboard</h1>
+</div>
+
+<div class="cae-stats-grid">
+    <div class="cae-stat-card">
+        <div class="cae-stat-card__label">Total de uploads</div>
+        <div class="cae-stat-card__value">{{.Stats.TotalUploads}}</div>
+    </div>
+    <div class="cae-stat-card">
+        <div class="cae-stat-card__label">Último processamento</div>
+        <div class="cae-stat-card__value" style="font-size: 18px;">{{.Stats.LastProcess}}</div>
+    </div>
+</div>
+
+<div class="cae-card">
+    <h2 style="margin-bottom: var(--cae-space-3);">Ações rápidas</h2>
+    <div style="display: flex; gap: var(--cae-space-2);">
+        <a href="/saldos-esperados/data" class="cae-btn">⬆️ Novo processamento</a>
+        <a href="/saldos-esperados/history" class="cae-btn cae-btn--secondary">📁 Ver histórico</a>
+    </div>
+</div>
+{{end}}

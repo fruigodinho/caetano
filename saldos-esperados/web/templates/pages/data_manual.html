@@ -1,0 +1,100 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Colar balancete manualmente</h1>
+</div>
+
+<div class="cae-card" style="max-width: 720px; margin: 0 auto;">
+    <div class="cae-form-group">
+        <label for="filename">Nome do ficheiro (opcional)</label>
+        <input type="text" id="filename" class="cae-input" placeholder="ex: balancete_jan_2026.csv">
+    </div>
+
+    <div class="cae-form-group">
+        <label for="content">Conteúdo do CSV</label>
+        <textarea id="content" rows="15" class="cae-input" style="font-family: ui-monospace, monospace; font-size: 13px;"
+            placeholder="Cole aqui o conteúdo do ficheiro CSV..." required></textarea>
+    </div>
+
+    <div class="cae-progress" id="progress-container" hidden>
+        <div class="cae-progress__labels">
+            <span id="progress-status">A processar...</span>
+            <span id="progress-percent">0%</span>
+        </div>
+        <div class="cae-progress__track">
+            <div class="cae-progress__fill" id="progress-bar"></div>
+        </div>
+    </div>
+
+    <div id="message-container"></div>
+
+    <div style="margin-top: var(--cae-space-4); display: flex; justify-content: space-between;">
+        <a href="/saldos-esperados/data" class="cae-btn cae-btn--secondary">Voltar</a>
+        <button type="button" class="cae-btn" id="submit-btn">Processar conteúdo</button>
+    </div>
+</div>
+
+<script src="/saldos-esperados/assets/js/upload.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var submitBtn = document.getElementById("submit-btn");
+        var progressContainer = document.getElementById("progress-container");
+        var progressBar = document.getElementById("progress-bar");
+        var progressStatus = document.getElementById("progress-status");
+        var progressPercent = document.getElementById("progress-percent");
+        var messageContainer = document.getElementById("message-container");
+
+        submitBtn.addEventListener("click", function () {
+            var content = document.getElementById("content").value;
+            var filename = document.getElementById("filename").value.trim();
+
+            if (!content.trim()) {
+                fail(new Error("O conteúdo não pode estar vazio."));
+                return;
+            }
+            if (!filename) {
+                filename = "manual_upload_" + new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-") + ".csv";
+            } else if (!filename.toLowerCase().endsWith(".csv")) {
+                filename += ".csv";
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "A processar...";
+            progressContainer.hidden = false;
+            messageContainer.innerHTML = "";
+            setProgress(0, "A processar...");
+
+            try {
+                var parsed = window.caeUploadCSV.parseCSVContent(content);
+                window.caeUploadCSV
+                    .uploadEntries(filename, parsed.label, parsed.entries, setProgress)
+                    .then(function () {
+                        setTimeout(function () {
+                            window.location.href = "/saldos-esperados/dashboard";
+                        }, 800);
+                    })
+                    .catch(fail);
+            } catch (err) {
+                fail(err);
+            }
+        });
+
+        function setProgress(percent, status) {
+            var p = Math.round(percent);
+            progressBar.style.width = p + "%";
+            progressPercent.textContent = p + "%";
+            progressStatus.textContent = status;
+        }
+
+        function fail(err) {
+            progressContainer.hidden = true;
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Processar conteúdo";
+            var alertEl = document.createElement("div");
+            alertEl.className = "cae-alert cae-alert--danger";
+            alertEl.textContent = err.message;
+            messageContainer.innerHTML = "";
+            messageContainer.appendChild(alertEl);
+        }
+    });
+</script>
+{{end}}
