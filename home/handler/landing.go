@@ -10,6 +10,7 @@ import (
 
 	"github.com/fruigodinho/caetano/core/acl"
 	"github.com/fruigodinho/caetano/core/auth"
+	coreweb "github.com/fruigodinho/caetano/core/web"
 )
 
 // App é a projeção de uma aplicação montada, para a página de entrada.
@@ -46,12 +47,9 @@ func (h *LandingHandler) Show(c *gin.Context) {
 		visible = h.visibleFor(c.Request.Context(), ac.Principal)
 	}
 
-	c.HTML(http.StatusOK, "landing", gin.H{
-		"Layout": "authenticated",
-		"Title":  "Início",
-		"Nav":    []NavLink{},
-		"Apps":   visible,
-	})
+	c.HTML(http.StatusOK, "landing", coreweb.PageData(c, "Início", gin.H{
+		"Apps": visible,
+	}))
 }
 
 func (h *LandingHandler) visibleFor(ctx context.Context, p auth.Principal) []App {
@@ -71,11 +69,4 @@ func (h *LandingHandler) visibleFor(ctx context.Context, p auth.Principal) []App
 		}
 	}
 	return out
-}
-
-// NavLink é um item da barra de navegação do layout partilhado.
-type NavLink struct {
-	Href  string
-	Label string
-	Icon  string
 }

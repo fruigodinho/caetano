@@ -7,16 +7,29 @@ import (
 	"fmt"
 	"html/template"
 	"io/fs"
+	"maps"
 	"net/http"
 	"path"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/render"
+
+	coreconfig "github.com/fruigodinho/caetano/core/config"
 )
 
 // DefaultLayout é o layout usado quando gin.H não define "Layout".
 const DefaultLayout = "base"
+
+// baseFuncMap são as funções que os layouts partilhados (templates/layouts)
+// exigem de qualquer módulo que os use - registadas aqui, não em cada
+// chamador de BuildModule, para o layout nunca falhar a parsear por um
+// módulo se ter esquecido de as fornecer. O funcMap de cada módulo pode
+// acrescentar as suas próprias funções por cima; não pode sobrepor estas.
+var baseFuncMap = template.FuncMap{
+	"isProduction": coreconfig.IsProduction,
+	"upper":        strings.ToUpper,
+}
 
 // Renderer implementa gin.HTMLRender usando conjuntos de templates por página: cada
 // página é parseada junto com todos os layouts e partials, num único
@@ -47,6 +60,11 @@ func NewRenderer() *Renderer {
 // ou entre módulos já registados — um nome duplicado é um erro de programação, não
 // algo a resolver silenciosamente em runtime.
 func (r *Renderer) BuildModule(fsys, shared fs.FS, prefix string, funcMap template.FuncMap) error {
+	merged := make(template.FuncMap, len(baseFuncMap)+len(funcMap))
+	maps.Copy(merged, baseFuncMap)
+	maps.Copy(merged, funcMap)
+	funcMap = merged
+
 	pages, err := fs.Glob(fsys, "templates/pages/*.html")
 	if err != nil {
 		return err

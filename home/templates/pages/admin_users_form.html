@@ -1,0 +1,45 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>{{.Title}}</h1>
+    <a href="/admin/users" class="cae-btn cae-btn--secondary">← Voltar</a>
+</div>
+
+{{if .Error}}<div class="cae-alert cae-alert--danger">{{.Error}}</div>{{end}}
+
+<div class="cae-card" style="max-width: 480px;">
+    <form action="/admin/users" method="post">
+        {{if .IsEdit}}<input type="hidden" name="id" value="{{.TargetUser.ID}}">{{end}}
+
+        <div class="cae-form-group">
+            <label for="email">Email</label>
+            <input class="cae-input" type="email" id="email" name="email" value="{{.TargetUser.Email}}" required {{if .IsEdit}}readonly{{end}}>
+        </div>
+
+        <div class="cae-form-group">
+            <label for="name">Nome</label>
+            <input class="cae-input" type="text" id="name" name="name" value="{{.TargetUser.Name}}">
+        </div>
+
+        <div class="cae-form-group">
+            <label for="role">Role</label>
+            {{$current := .TargetUser.Role}}
+            <select class="cae-select" id="role" name="role" required>
+                {{range .Roles}}
+                <option value="{{.}}" {{if eq . $current}}selected{{end}}>{{.}}</option>
+                {{end}}
+            </select>
+        </div>
+
+        {{if .IsEdit}}
+        <div class="cae-form-group">
+            <label style="display: flex; align-items: center; gap: var(--cae-space-2); font-weight: 400;">
+                <input type="checkbox" name="enabled" {{if .TargetUser.Enabled}}checked{{end}}>
+                Ativo
+            </label>
+        </div>
+        {{end}}
+
+        <button type="submit" class="cae-btn">💾 Gravar</button>
+    </form>
+</div>
+{{end}}

@@ -67,7 +67,11 @@ func main() {
 	resolver := coreauth.NewResolver(userStore)
 	aclStore := coreacl.NewStore(db)
 
-	if err := aclStore.SyncCatalog(ctx, append(xmldri.Areas(), saldosesperados.Areas()...)); err != nil {
+	// catalog é a única lista de áreas/rotas de negócio do caetano - alimenta
+	// SyncCatalog (BD) e BuildNav (navbar). Nenhum módulo mantém uma segunda
+	// cópia à parte desta.
+	catalog := append(xmldri.Areas(), saldosesperados.Areas()...)
+	if err := aclStore.SyncCatalog(ctx, catalog); err != nil {
 		log.Fatalf("erro ao sincronizar catálogo de ACL: %v", err)
 	}
 
@@ -113,6 +117,13 @@ func main() {
 	protected := router.Group("/")
 	protected.Use(coremw.Identity(resolver, devMode, cfg.DevAutoLoginEmail))
 	protected.Use(coremw.RequireUser())
+	protected.Use(coremw.BuildNav(aclStore, catalog, coreweb.NavGroup{
+		Label: "Administração",
+		Items: []coreweb.NavItem{
+			{Href: "/admin/users", Label: "Utilizadores", Icon: "👥"},
+			{Href: "/admin/acl", Label: "ACL", Icon: "🔐"},
+		},
+	}))
 
 	landingHandler := handler.NewLandingHandler(aclStore, toHandlerApps(registeredApps))
 	protected.GET("/", landingHandler.Show)
@@ -122,6 +133,12 @@ func main() {
 	admin.GET("/acl", adminHandler.Show)
 	admin.POST("/acl/grant", adminHandler.Grant)
 	admin.POST("/acl/revoke/:id", adminHandler.Revoke)
+
+	adminUsersHandler := handler.NewAdminUsersHandler(userStore)
+	admin.GET("/users", adminUsersHandler.List)
+	admin.GET("/users/new", adminUsersHandler.ShowForm)
+	admin.GET("/users/:id", adminUsersHandler.ShowForm)
+	admin.POST("/users", adminUsersHandler.Save)
 
 	xmldri.RegisterRoutes(protected.Group("/xmldri"), aclStore)
 	saldosesperados.RegisterRoutes(protected.Group("/saldos-esperados"), aclStore, db)

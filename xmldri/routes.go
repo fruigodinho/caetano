@@ -18,18 +18,12 @@ const AreaConverter = "converter"
 // upload fica registada no renderer partilhado — ver home/render.go.
 const TemplateUpload = "xmldri/upload"
 
-// NavLink é um item da barra de navegação do layout partilhado.
-type NavLink struct {
-	Href  string
-	Label string
-	Icon  string
-}
-
 // Areas devolve o catálogo de áreas de ACL declaradas por este módulo, para
-// core/acl.Store.SyncCatalog registar no arranque.
+// core/acl.Store.SyncCatalog registar no arranque e para
+// core/middleware.BuildNav construir a navbar (Href/Icon/GroupLabel).
 func Areas() []acl.AreaDef {
 	return []acl.AreaDef{
-		{App: AppName, Key: AreaConverter, Label: "Conversor CSV → XML"},
+		{App: AppName, Key: AreaConverter, Label: "Conversor CSV → XML", Href: "/xmldri", Icon: "🔄", GroupLabel: "xmldri"},
 	}
 }
 

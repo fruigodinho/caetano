@@ -1,0 +1,44 @@
+{{define "content"}}
+<div class="cae-page-header">
+    <h1>Utilizadores</h1>
+    <a href="/admin/users/new" class="cae-btn">➕ Novo utilizador</a>
+</div>
+
+<div class="cae-card">
+    <div style="overflow-x: auto;">
+        <table class="cae-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Nome</th>
+                    <th>Role</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Users}}
+                <tr>
+                    <td>{{.Email}}</td>
+                    <td>{{.Name}}</td>
+                    <td><span class="cae-badge">{{.Role}}</span></td>
+                    <td>
+                        {{if .Enabled}}
+                        <span class="cae-badge cae-badge--success">Ativo</span>
+                        {{else}}
+                        <span class="cae-badge cae-badge--danger">Inativo</span>
+                        {{end}}
+                    </td>
+                    <td class="cae-table__actions">
+                        <a href="/admin/users/{{.ID}}" class="cae-btn cae-btn--secondary">✏️ Editar</a>
+                    </td>
+                </tr>
+                {{end}}
+                {{if not .Users}}
+                <tr><td colspan="5" class="cae-empty-state">Nenhum utilizador registado.</td></tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

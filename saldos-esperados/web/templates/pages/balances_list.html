@@ -45,12 +45,12 @@
                     <td>{{.AccountNumber}}</td>
                     <td>{{.AccountName}}</td>
                     <td><span class="cae-badge">{{.ExpectedBalanceType}}</span></td>
-                    <td>
-                        <div style="display: flex; gap: var(--cae-space-2);">
-                            <a href="/saldos-esperados/balances/{{.AccountNumber}}" class="cae-btn cae-btn--secondary" style="padding: 4px 10px;">✏️ Editar</a>
-                            <form action="/saldos-esperados/balances/{{.AccountNumber}}/delete" method="POST" style="margin: 0;"
+                    <td class="cae-table__actions">
+                        <div class="cae-table__actions-group">
+                            <a href="/saldos-esperados/balances/{{.AccountNumber}}" class="cae-btn cae-btn--secondary">✏️ Editar</a>
+                            <form action="/saldos-esperados/balances/{{.AccountNumber}}/delete" method="POST"
                                 onsubmit="return confirm('Tem a certeza?');">
-                                <button type="submit" class="cae-btn cae-btn--danger" style="padding: 4px 10px;">🗑️ Eliminar</button>
+                                <button type="submit" class="cae-btn cae-btn--danger">🗑️ Eliminar</button>
                             </form>
                         </div>
                     </td>

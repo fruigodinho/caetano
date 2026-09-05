@@ -8,6 +8,7 @@ import (
 
 	coreacl "github.com/fruigodinho/caetano/core/acl"
 	"github.com/fruigodinho/caetano/core/users"
+	coreweb "github.com/fruigodinho/caetano/core/web"
 )
 
 // AdminACLHandler gere o catálogo de áreas de ACL e as suas concessões
@@ -48,15 +49,12 @@ func (h *AdminACLHandler) Show(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "admin_acl", gin.H{
-		"Layout": "authenticated",
-		"Title":  "Administração de ACL",
-		"Nav":    []NavLink{},
+	c.HTML(http.StatusOK, "admin_acl", coreweb.PageData(c, "Administração de ACL", gin.H{
 		"Areas":  areas,
 		"Grants": grants,
 		"Users":  knownUsers,
 		"Roles":  roles,
-	})
+	}))
 }
 
 // Grant processa o formulário de concessão (a um utilizador ou a um role).

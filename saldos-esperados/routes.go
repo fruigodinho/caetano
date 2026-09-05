@@ -35,16 +35,22 @@ const (
 )
 
 // Areas devolve o catálogo de áreas de ACL declaradas por este módulo, para
-// core/acl.Store.SyncCatalog registar no arranque.
+// core/acl.Store.SyncCatalog registar no arranque e para
+// core/middleware.BuildNav construir a navbar (Href/Icon).
+//
+// AreaBalancesManage não tem Href próprio: é a mesma página de
+// AreaBalancesView (só acrescenta permissão de escrita nela), por isso não
+// deve aparecer como um segundo item de navegação para a mesma rota.
 func Areas() []acl.AreaDef {
+	const group = "Saldos Esperados"
 	return []acl.AreaDef{
-		{App: AppName, Key: AreaDashboard, Label: "Dashboard"},
-		{App: AppName, Key: AreaData, Label: "Processamento de balancetes"},
-		{App: AppName, Key: AreaTypes, Label: "Tipos de saldo"},
-		{App: AppName, Key: AreaBalancesView, Label: "Saldos esperados (consulta)"},
-		{App: AppName, Key: AreaBalancesManage, Label: "Saldos esperados (gestão)"},
-		{App: AppName, Key: AreaHistory, Label: "Histórico de processamentos"},
-		{App: AppName, Key: AreaAudit, Label: "Auditoria"},
+		{App: AppName, Key: AreaDashboard, Label: "Dashboard", Href: "/saldos-esperados/dashboard", Icon: "📊", GroupLabel: group},
+		{App: AppName, Key: AreaData, Label: "Processamento de balancetes", Href: "/saldos-esperados/data", Icon: "⬆️", GroupLabel: group},
+		{App: AppName, Key: AreaTypes, Label: "Tipos de saldo", Href: "/saldos-esperados/types", Icon: "🏷️", GroupLabel: group},
+		{App: AppName, Key: AreaBalancesView, Label: "Saldos esperados (consulta)", Href: "/saldos-esperados/balances", Icon: "💰", GroupLabel: group},
+		{App: AppName, Key: AreaBalancesManage, Label: "Saldos esperados (gestão)", GroupLabel: group},
+		{App: AppName, Key: AreaHistory, Label: "Histórico de processamentos", Href: "/saldos-esperados/history", Icon: "📁", GroupLabel: group},
+		{App: AppName, Key: AreaAudit, Label: "Auditoria", Href: "/saldos-esperados/audit", Icon: "📋", GroupLabel: group},
 	}
 }
 

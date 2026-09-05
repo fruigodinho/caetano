@@ -6,17 +6,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	coreweb "github.com/fruigodinho/caetano/core/web"
 	"github.com/fruigodinho/caetano/xmldri/converter"
 	"github.com/fruigodinho/caetano/xmldri/library/utilities"
 )
 
 func csvHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, TemplateUpload, gin.H{
-		"Layout": "authenticated",
-		"Title":  "Conversor CSV → XML",
-		"Nav":    []NavLink{},
-		"year":   utilities.Year(),
-	})
+	c.HTML(http.StatusOK, TemplateUpload, coreweb.PageData(c, "Conversor CSV → XML", gin.H{
+		"year": utilities.Year(),
+	}))
 }
 
 func csvUploadHandler(c *gin.Context) {

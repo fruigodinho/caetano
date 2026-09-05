@@ -1,24 +1,36 @@
-/* caetano — componentes: topbar, botão, card, formulário, tabela, alerta. */
+/* caetano — componentes: sidebar, botão, card, formulário, tabela, alerta. */
 
-.cae-topbar {
+.cae-shell {
     display: flex;
-    align-items: center;
-    gap: var(--cae-space-4);
-    padding: var(--cae-space-2) var(--cae-space-4);
-    background: #fff;
-    border-bottom: 1px solid var(--cae-gray-200);
+    min-height: 100vh;
+    align-items: stretch;
 }
 
-.cae-topbar__brand {
+.cae-sidebar {
+    width: 240px;
+    flex: 0 0 240px;
+    background: #fff;
+    border-right: 1px solid var(--cae-gray-200);
+    display: flex;
+    flex-direction: column;
+}
+
+.cae-sidebar__brand {
     display: flex;
     align-items: center;
     gap: var(--cae-space-2);
+    padding: var(--cae-space-3) var(--cae-space-4);
     font-weight: 700;
-    font-size: 18px;
+    font-size: 16px;
     color: var(--cae-gray-900);
+    border-bottom: 1px solid var(--cae-gray-200);
 }
 
-.cae-topbar__logo {
+.cae-sidebar__brand:hover {
+    text-decoration: none;
+}
+
+.cae-sidebar__logo {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -29,31 +41,103 @@
     color: #fff;
     font-size: 15px;
     font-weight: 700;
+    flex-shrink: 0;
 }
 
-.cae-topbar__nav {
-    display: flex;
-    gap: var(--cae-space-3);
+.cae-sidebar__nav {
     flex: 1;
+    overflow-y: auto;
+    padding: var(--cae-space-3) var(--cae-space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--cae-space-3);
 }
 
-.cae-topbar__link {
-    color: var(--cae-gray-700);
-    padding: var(--cae-space-1) var(--cae-space-2);
+.cae-sidebar__group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cae-sidebar__group-label {
+    padding: 0 var(--cae-space-3) var(--cae-space-1);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cae-gray-500);
+}
+
+.cae-sidebar__link {
+    display: flex;
+    align-items: center;
+    gap: var(--cae-space-2);
+    padding: var(--cae-space-2) var(--cae-space-3);
     border-radius: var(--cae-radius-sm);
+    color: var(--cae-gray-700);
+    font-size: 14px;
 }
 
-.cae-topbar__link:hover {
+.cae-sidebar__link:hover {
     background: var(--cae-gray-100);
     text-decoration: none;
 }
 
-.cae-topbar__user {
+.cae-sidebar__icon {
+    flex-shrink: 0;
+}
+
+.cae-sidebar__user {
     display: flex;
     align-items: center;
-    gap: var(--cae-space-3);
-    color: var(--cae-gray-500);
+    gap: var(--cae-space-2);
+    padding: var(--cae-space-3) var(--cae-space-4);
+    border-top: 1px solid var(--cae-gray-200);
+}
+
+.cae-sidebar__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--cae-color-primary);
+    color: #fff;
+    font-weight: 600;
     font-size: 13px;
+    flex-shrink: 0;
+}
+
+.cae-sidebar__user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.cae-sidebar__email {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cae-gray-900);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cae-sidebar__role {
+    font-size: 12px;
+    color: var(--cae-gray-500);
+}
+
+.cae-sidebar__logout {
+    font-size: 12px;
+    color: var(--cae-gray-500);
+    flex-shrink: 0;
+}
+
+.cae-content {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
 }
 
 .cae-btn {
@@ -144,6 +228,27 @@
     background: var(--cae-gray-50);
     font-weight: 600;
     color: var(--cae-gray-700);
+}
+
+/* Coluna de ações (Editar/Eliminar): largura mínima, nunca espremida pelas
+   colunas de texto vizinhas — evita que os botões saiam do ecrã antes de a
+   coluna de descrição começar a quebrar linha. */
+.cae-table__actions {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.cae-table__actions-group {
+    display: flex;
+    gap: var(--cae-space-2);
+}
+
+.cae-table__actions-group form {
+    margin: 0;
+}
+
+.cae-table__actions .cae-btn {
+    padding: 4px 10px;
 }
 
 .cae-alert {

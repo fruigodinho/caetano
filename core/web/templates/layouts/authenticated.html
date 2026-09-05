@@ -9,19 +9,37 @@
     <link rel="stylesheet" href="/static/css/components.css">
 </head>
 <body class="cae-body">
-    <header class="cae-topbar">
-        <a class="cae-topbar__brand" href="/"><span class="cae-topbar__logo">C</span>caetano - contabilidade</a>
-        <nav class="cae-topbar__nav">
-            {{range .Nav}}<a href="{{.Href}}" class="cae-topbar__link">{{if .Icon}}{{.Icon}} {{end}}{{.Label}}</a>{{end}}
-        </nav>
-        <div class="cae-topbar__user">
-            {{if .CurrentUser}}<span class="cae-topbar__email">{{.CurrentUser.Email}}</span>{{end}}
-            {{if .LogoutURL}}<a class="cae-topbar__logout" href="{{.LogoutURL}}">Sair</a>{{end}}
-        </div>
-    </header>
-    <main class="cae-main">
-        {{block "content" .}}{{end}}
-    </main>
+    <div class="cae-shell">
+        <aside class="cae-sidebar">
+            <a class="cae-sidebar__brand" href="/">
+                <span class="cae-sidebar__logo">C</span>
+                <span>contabilidade</span>
+            </a>
+            <nav class="cae-sidebar__nav">
+                {{range .Nav}}
+                <div class="cae-sidebar__group">
+                    <div class="cae-sidebar__group-label">{{.Label}}</div>
+                    {{range .Items}}<a href="{{.Href}}" class="cae-sidebar__link">{{if .Icon}}<span class="cae-sidebar__icon">{{.Icon}}</span>{{end}}<span>{{.Label}}</span></a>{{end}}
+                </div>
+                {{end}}
+            </nav>
+            {{if .CurrentUser}}
+            <div class="cae-sidebar__user">
+                <span class="cae-sidebar__avatar">{{slice .CurrentUser.Email 0 1 | upper}}</span>
+                <div class="cae-sidebar__user-info">
+                    <div class="cae-sidebar__email" title="{{.CurrentUser.Email}}">{{.CurrentUser.Email}}</div>
+                    <div class="cae-sidebar__role">{{.CurrentUser.Role}}</div>
+                </div>
+                {{if isProduction}}<a class="cae-sidebar__logout" href="/cdn-cgi/access/logout">Sair</a>{{end}}
+            </div>
+            {{end}}
+        </aside>
+        <main class="cae-content">
+            <div class="cae-main">
+                {{block "content" .}}{{end}}
+            </div>
+        </main>
+    </div>
     <script src="/static/js/app.js" defer></script>
 </body>
 </html>

@@ -13,10 +13,23 @@ import (
 )
 
 // AreaDef é uma área de ACL declarada por um módulo (xmldri, saldos-esperados).
+//
+// Href, Icon e GroupLabel são metadados de navegação, não de autorização:
+// dizem à barra de navegação partilhada (core/middleware.BuildNav) para onde
+// apontar, que ícone mostrar e em que secção agrupar esta área quando está
+// visível ao utilizador. Href vazio significa "esta área não tem página
+// própria" (ex.: uma área que só controla um botão dentro de uma página já
+// coberta por outra área) - fica de fora da navbar, mas continua a valer
+// para RequireArea. GroupLabel é o mesmo em todas as áreas de um módulo (ex.:
+// "xmldri", "Saldos Esperados") - repetido por área de propósito, para o
+// módulo não ter de manter uma segunda estrutura só para o agrupamento.
 type AreaDef struct {
-	App     string
-	Key     string
-	Label   string
+	App        string
+	Key        string
+	Label      string
+	Href       string
+	Icon       string
+	GroupLabel string
 }
 
 // SubjectType identifica o tipo de destinatário de uma concessão de ACL.
@@ -161,6 +174,33 @@ func (s *Store) Grant(ctx context.Context, subjectType SubjectType, subjectID, a
 func (s *Store) Revoke(ctx context.Context, grantID int64) error {
 	_, err := s.db.ExecContext(ctx, `DELETE FROM core_acl_grants WHERE id = $1`, grantID)
 	return err
+}
+
+// AllowedAreaKeys devolve o conjunto "app/areaKey" a que o principal tem
+// acesso (por concessão direta ou pelo seu role) - usado por
+// core/middleware.BuildNav para decidir que itens de navegação mostrar. Não
+// trata admin como caso especial (o chamador já sabe que admin vê tudo).
+func (s *Store) AllowedAreaKeys(ctx context.Context, p auth.Principal) (map[string]bool, error) {
+	const q = `
+		SELECT app, area_key FROM core_acl_grants
+		WHERE (subject_type = 'user' AND subject_id = $1)
+		   OR (subject_type = 'role' AND subject_id = $2)
+	`
+	rows, err := s.db.QueryContext(ctx, q, fmt.Sprint(p.UserID), string(p.Role))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	set := make(map[string]bool)
+	for rows.Next() {
+		var app, key string
+		if err := rows.Scan(&app, &key); err != nil {
+			return nil, err
+		}
+		set[app+"/"+key] = true
+	}
+	return set, rows.Err()
 }
 
 // AppsFor devolve os nomes das aplicações a que o principal tem pelo menos uma

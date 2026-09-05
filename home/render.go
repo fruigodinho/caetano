@@ -9,7 +9,9 @@ import (
 	"github.com/fruigodinho/caetano/xmldri"
 )
 
-// funcMap são as funções de template partilhadas por todas as páginas.
+// funcMap são as funções de template específicas das páginas de negócio
+// (add/sub, usados na paginação). isProduction já vem de core/web.BuildModule
+// - não precisa de ser repetida aqui.
 var funcMap = template.FuncMap{
 	"add": func(a, b int) int { return a + b },
 	"sub": func(a, b int) int { return a - b },

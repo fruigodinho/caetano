@@ -73,7 +73,7 @@
                     <td>{{.SubjectID}}</td>
                     <td>{{.App}}</td>
                     <td>{{.AreaKey}}</td>
-                    <td>
+                    <td class="cae-table__actions">
                         <form action="/admin/acl/revoke/{{.ID}}" method="post" onsubmit="return confirm('Revogar este acesso?');">
                             <button class="cae-btn cae-btn--danger" type="submit">Revogar</button>
                         </form>
