@@ -65,36 +65,29 @@
 
 <div class="cae-card">
     <h2>Concessões atuais</h2>
-    <div style="overflow-x: auto;">
-        <table class="cae-table">
-            <thead>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Destinatário</th>
-                    <th>Aplicação</th>
-                    <th>Área</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+    {{if not .SubjectGroups}}
+    <p>Nenhuma concessão registada.</p>
+    {{end}}
+    <div class="cae-acl-subjects">
+        {{range .SubjectGroups}}
+        <div class="cae-acl-subject">
+            <h3>
+                <span class="cae-badge cae-badge--{{.SubjectType}}">{{.SubjectType}}</span>
+                {{.SubjectLabel}}
+            </h3>
+            <ul class="cae-acl-subject__grants">
                 {{range .Grants}}
-                <tr>
-                    <td>{{.SubjectType}}</td>
-                    <td>{{.SubjectID}}</td>
-                    <td>{{.App}}</td>
-                    <td>{{.AreaKey}}</td>
-                    <td class="cae-table__actions">
-                        <form action="/admin/acl/revoke/{{.ID}}" method="post" onsubmit="return confirm('Revogar este acesso?');">
-                            <button class="cae-btn cae-btn--danger" type="submit">Revogar</button>
-                        </form>
-                    </td>
-                </tr>
+                <li>
+                    <span class="cae-acl-subject__app">{{.App}}</span>
+                    <span class="cae-acl-subject__area">{{.AreaLabel}}</span>
+                    <form action="/admin/acl/revoke/{{.ID}}" method="post" onsubmit="return confirm('Revogar este acesso?');">
+                        <button class="cae-btn cae-btn--danger cae-btn--sm" type="submit">Revogar</button>
+                    </form>
+                </li>
                 {{end}}
-                {{if not .Grants}}
-                <tr><td colspan="5">Nenhuma concessão registada.</td></tr>
-                {{end}}
-            </tbody>
-        </table>
+            </ul>
+        </div>
+        {{end}}
     </div>
 </div>
 {{end}}

@@ -224,6 +224,64 @@
     padding: 0 var(--cae-space-1);
 }
 
+.cae-acl-subjects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--cae-space-3);
+}
+
+.cae-acl-subject {
+    border: 1px solid var(--cae-gray-200);
+    border-radius: var(--cae-radius-sm);
+    padding: var(--cae-space-3);
+}
+
+.cae-acl-subject h3 {
+    margin: 0 0 var(--cae-space-2);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: var(--cae-space-2);
+}
+
+.cae-acl-subject__grants {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--cae-space-1);
+}
+
+.cae-acl-subject__grants li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cae-space-2);
+    font-size: 13px;
+    padding: var(--cae-space-1) 0;
+    border-top: 1px solid var(--cae-gray-100);
+}
+
+.cae-acl-subject__grants li:first-child {
+    border-top: none;
+}
+
+.cae-acl-subject__app {
+    color: var(--cae-gray-500);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.cae-acl-subject__area {
+    flex: 1;
+}
+
+.cae-btn--sm {
+    padding: 2px var(--cae-space-2);
+    font-size: 12px;
+}
+
 .cae-checkbox {
     display: block;
     font-weight: normal;
@@ -440,6 +498,16 @@
 .cae-badge--danger {
     background: #fef2f2;
     color: var(--cae-color-danger);
+}
+
+.cae-badge--user {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.cae-badge--role {
+    background: #fdf4ff;
+    color: #a21caf;
 }
 
 /* Zona de upload de ficheiro (com suporte opcional a drag-and-drop). */

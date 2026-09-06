@@ -50,6 +50,62 @@ func groupAreasByApp(areas []coreacl.Area) []AreaGroup {
 	return groups
 }
 
+// GrantItem é uma concessão já resolvida para exibição (com o rótulo da área
+// em vez da chave crua), agrupada por destinatário no template.
+type GrantItem struct {
+	ID        int64
+	App       string
+	AreaLabel string
+}
+
+// SubjectGroup junta todas as concessões de um mesmo destinatário (utilizador
+// ou role) num único bloco, para a UI organizar "concessões atuais" por
+// destinatário em vez de uma linha por concessão.
+type SubjectGroup struct {
+	SubjectType  coreacl.SubjectType
+	SubjectLabel string
+	Grants       []GrantItem
+}
+
+// groupGrantsBySubject agrupa concessões por destinatário (tipo + id),
+// resolve o rótulo do destinatário (email do utilizador, ou o nome do role) e
+// o rótulo da área (em vez da chave crua). A ordem dos grupos é a de primeira
+// aparição em grants (já vem ordenado por app/área da BD).
+func groupGrantsBySubject(grants []coreacl.Grant, areaLabel map[string]string, userEmail map[string]string) []SubjectGroup {
+	index := make(map[string]int)
+	var groups []SubjectGroup
+
+	for _, g := range grants {
+		key := string(g.SubjectType) + ":" + g.SubjectID
+		label := areaLabel[g.App+":"+g.AreaKey]
+		if label == "" {
+			label = g.AreaKey
+		}
+		item := GrantItem{ID: g.ID, App: g.App, AreaLabel: label}
+
+		if i, ok := index[key]; ok {
+			groups[i].Grants = append(groups[i].Grants, item)
+			continue
+		}
+
+		subjectLabel := g.SubjectID
+		if g.SubjectType == coreacl.SubjectUser {
+			if email, ok := userEmail[g.SubjectID]; ok {
+				subjectLabel = email
+			}
+		}
+
+		index[key] = len(groups)
+		groups = append(groups, SubjectGroup{
+			SubjectType:  g.SubjectType,
+			SubjectLabel: subjectLabel,
+			Grants:       []GrantItem{item},
+		})
+	}
+
+	return groups
+}
+
 // Show lista as áreas ativas, as concessões existentes e os utilizadores
 // conhecidos (para o formulário de concessão).
 func (h *AdminACLHandler) Show(c *gin.Context) {
@@ -71,11 +127,20 @@ func (h *AdminACLHandler) Show(c *gin.Context) {
 		return
 	}
 
+	areaLabel := make(map[string]string, len(areas))
+	for _, a := range areas {
+		areaLabel[a.App+":"+a.Key] = a.Label
+	}
+	userEmail := make(map[string]string, len(knownUsers))
+	for _, u := range knownUsers {
+		userEmail[strconv.FormatInt(u.ID, 10)] = u.Email
+	}
+
 	c.HTML(http.StatusOK, "admin_acl", coreweb.PageData(c, "Administração de ACL", gin.H{
-		"AreaGroups": groupAreasByApp(areas),
-		"Grants":     grants,
-		"Users":      knownUsers,
-		"Roles":      roles,
+		"AreaGroups":    groupAreasByApp(areas),
+		"SubjectGroups": groupGrantsBySubject(grants, areaLabel, userEmail),
+		"Users":         knownUsers,
+		"Roles":         roles,
 	}))
 }
 
