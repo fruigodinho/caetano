@@ -6,9 +6,13 @@
 # com: make deploy-restart
 #
 # Porquê sync sem stop?
-#   - systemctl stop via SSH pode causar instabilidade na ligação
+#   - Parar o serviço via SSH pode causar instabilidade na ligação
 #   - O binário é instalado com mv atómico (.new → destino), seguro com o
 #     processo em execução (mantém o inode antigo até ser reiniciado)
+#
+# CT 121 (Alpine/OpenRC, unprivileged): a ligação SSH é feita como root do
+# contentor, pelo que não é necessário sudo. Serviço gerido via rc-service
+# (ver `make deploy-restart` / `make deploy-status`), não systemctl.
 #
 # Diferença face ao padrão gonotesweb: templates e estáticos vão embutidos no
 # binário (go:embed em core/web, home, xmldri, saldos-esperados) — não há uma
@@ -19,7 +23,7 @@
 # Variáveis (sobreponíveis via env ou Makefile):
 #   DEPLOY_HOST    — host remoto (obrigatório)
 #   DEPLOY_PATH    — diretório remoto (ex.: /opt/caetano)
-#   DEPLOY_SERVICE — nome do serviço systemd (ex.: caetano)
+#   DEPLOY_SERVICE — nome do serviço OpenRC (ex.: caetano)
 #   BINARY_NAME    — nome do binário (padrão: caetano)
 #   DEPLOY_OWNER   — utilizador/grupo dono dos ficheiros no servidor
 
@@ -30,7 +34,7 @@ DEPLOY_PATH="${DEPLOY_PATH:-/opt/caetano}"
 DEPLOY_SERVICE="${DEPLOY_SERVICE:-caetano}"
 BINARY_NAME="${BINARY_NAME:-caetano}"
 BINARY_PATH="bin/${BINARY_NAME}"
-DEPLOY_OWNER="${DEPLOY_OWNER:-caetano-app}"
+DEPLOY_OWNER="${DEPLOY_OWNER:-caetano}"
 
 SSH_TARGET="${DEPLOY_HOST}"
 SSH_CTRL="/tmp/caetano-deploy-$$-ctrl"
@@ -82,10 +86,10 @@ log_ok "Binário enviado"
 log_section "Instalar  →  ${DEPLOY_PATH}/"
 log_info "A instalar binário (mv atómico)..."
 if ! ssh -tt ${SSH_OPTS} "${SSH_TARGET}" \
-    "sudo cp ${DEPLOY_PATH}/${BINARY_NAME} ${DEPLOY_PATH}/${BINARY_NAME}.prev 2>/dev/null || true; \
-     sudo cp ~/${REMOTE_TMP}/${BINARY_NAME} ${DEPLOY_PATH}/${BINARY_NAME}.new && \
-     sudo chmod +x ${DEPLOY_PATH}/${BINARY_NAME}.new && \
-     sudo mv -f ${DEPLOY_PATH}/${BINARY_NAME}.new ${DEPLOY_PATH}/${BINARY_NAME}"; then
+    "cp ${DEPLOY_PATH}/${BINARY_NAME} ${DEPLOY_PATH}/${BINARY_NAME}.prev 2>/dev/null || true; \
+     cp ~/${REMOTE_TMP}/${BINARY_NAME} ${DEPLOY_PATH}/${BINARY_NAME}.new && \
+     chmod +x ${DEPLOY_PATH}/${BINARY_NAME}.new && \
+     mv -f ${DEPLOY_PATH}/${BINARY_NAME}.new ${DEPLOY_PATH}/${BINARY_NAME}"; then
     log_error "Falha ao instalar binário em ${DEPLOY_PATH}/"
     ssh ${SSH_OPTS} "${SSH_TARGET}" "rm -rf ~/${REMOTE_TMP}" || true
     exit 1
@@ -94,7 +98,7 @@ log_ok "Binário instalado"
 
 log_info "A definir owner ${DEPLOY_OWNER}:${DEPLOY_OWNER}..."
 if ! ssh -tt ${SSH_OPTS} "${SSH_TARGET}" \
-    "sudo chown ${DEPLOY_OWNER}:${DEPLOY_OWNER} ${DEPLOY_PATH}/${BINARY_NAME}"; then
+    "chown ${DEPLOY_OWNER}:${DEPLOY_OWNER} ${DEPLOY_PATH}/${BINARY_NAME}"; then
     log_error "Falha ao definir owner"
     ssh ${SSH_OPTS} "${SSH_TARGET}" "rm -rf ~/${REMOTE_TMP}" || true
     exit 1

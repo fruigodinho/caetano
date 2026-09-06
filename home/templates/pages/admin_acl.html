@@ -5,7 +5,7 @@
 
 <div class="cae-card">
     <h2>Conceder acesso a um utilizador</h2>
-    <form action="/admin/acl/grant" method="post">
+    <form action="/admin/acl/grant" method="post" onsubmit="return this.querySelectorAll('input[name=area_key]:checked').length > 0;">
         <input type="hidden" name="subject_type" value="user">
         <div class="cae-form-group">
             <label for="user_subject_id">Utilizador</label>
@@ -16,13 +16,18 @@
             </select>
         </div>
         <div class="cae-form-group">
-            <label for="user_app">Aplicação / área</label>
-            <select class="cae-select" id="user_app" name="area_key" required onchange="this.form.app.value=this.options[this.selectedIndex].dataset.app">
+            <label>Áreas</label>
+            {{range .AreaGroups}}
+            <fieldset class="cae-acl-group">
+                <legend>{{.App}}</legend>
                 {{range .Areas}}
-                <option value="{{.Key}}" data-app="{{.App}}">{{.App}} — {{.Label}}</option>
+                <label class="cae-checkbox">
+                    <input type="checkbox" name="area_key" value="{{.App}}:{{.Key}}">
+                    {{.Label}}
+                </label>
                 {{end}}
-            </select>
-            <input type="hidden" name="app" value="{{if .Areas}}{{(index .Areas 0).App}}{{end}}">
+            </fieldset>
+            {{end}}
         </div>
         <button class="cae-btn" type="submit">Conceder</button>
     </form>
@@ -30,7 +35,7 @@
 
 <div class="cae-card">
     <h2>Conceder acesso a um role</h2>
-    <form action="/admin/acl/grant" method="post">
+    <form action="/admin/acl/grant" method="post" onsubmit="return this.querySelectorAll('input[name=area_key]:checked').length > 0;">
         <input type="hidden" name="subject_type" value="role">
         <div class="cae-form-group">
             <label for="role_subject_id">Role</label>
@@ -41,13 +46,18 @@
             </select>
         </div>
         <div class="cae-form-group">
-            <label for="role_app">Aplicação / área</label>
-            <select class="cae-select" id="role_app" name="area_key" required onchange="this.form.app.value=this.options[this.selectedIndex].dataset.app">
+            <label>Áreas</label>
+            {{range .AreaGroups}}
+            <fieldset class="cae-acl-group">
+                <legend>{{.App}}</legend>
                 {{range .Areas}}
-                <option value="{{.Key}}" data-app="{{.App}}">{{.App}} — {{.Label}}</option>
+                <label class="cae-checkbox">
+                    <input type="checkbox" name="area_key" value="{{.App}}:{{.Key}}">
+                    {{.Label}}
+                </label>
                 {{end}}
-            </select>
-            <input type="hidden" name="app" value="{{if .Areas}}{{(index .Areas 0).App}}{{end}}">
+            </fieldset>
+            {{end}}
         </div>
         <button class="cae-btn" type="submit">Conceder</button>
     </form>

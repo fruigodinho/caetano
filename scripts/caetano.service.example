@@ -1,6 +1,11 @@
-# Unidade systemd de referência para o caetano.
+# Unidade systemd de referência para o caetano (host com systemd).
 #
-# Instalação (no servidor):
+# NOTA: o CT 121 de produção (Alpine/OpenRC) NÃO usa este ficheiro — usa
+# /etc/init.d/caetano (OpenRC, já criado no CT, carrega .env automaticamente)
+# gerido via `rc-service caetano start|stop|restart` (ver `make deploy-*`).
+# Este exemplo fica só como referência para um eventual host systemd.
+#
+# Instalação (num host systemd):
 #   sudo cp caetano.service.example /etc/systemd/system/caetano.service
 #   sudo systemctl daemon-reload
 #   sudo systemctl enable --now caetano

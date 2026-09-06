@@ -7,7 +7,7 @@ SHELL := /bin/bash
         tunnel-start tunnel-stop tunnel-status tunnel-restart \
         tunnel-start-prod tunnel-stop-prod tunnel-status-prod \
         import-legacy \
-        deploy deploy-restart deploy-status deploy-logs
+        deploy deploy-start deploy-stop deploy-restart deploy-status deploy-logs
 
 BINARY_NAME=caetano
 BINARY_PATH=bin/$(BINARY_NAME)
@@ -15,12 +15,13 @@ BINARY_PATH=bin/$(BINARY_NAME)
 BUILD_HASH := $(shell git rev-parse --short HEAD 2>/dev/null || date -u +%s)
 LDFLAGS_PROD = -w -s -X main.BuildVersion=$(BUILD_HASH)
 
-# Variáveis de deploy (sobrepor via env ou linha de comando: make deploy DEPLOY_HOST=...)
-DEPLOY_HOST    ?=
+# Variáveis de deploy — CT 121 (Alpine/OpenRC, unprivileged, ligação SSH como root)
+# Sobrepor via env ou linha de comando: make deploy DEPLOY_HOST=...
+DEPLOY_HOST    ?= caetano
 DEPLOY_PATH    ?= /opt/caetano
 DEPLOY_SERVICE ?= caetano
-HEALTH_URL     ?= https://se.rswebportal.com/ping
-DEPLOY_OWNER   ?= caetano-app
+HEALTH_URL     ?= http://192.168.200.121:8085/ping
+DEPLOY_OWNER   ?= caetano
 
 # Túnel SSH para a BD — aliases definidos no ~/.ssh/config do operador.
 # Ver caetano.dev.yaml.example / caetano.prod.yaml.example para o mapeamento.
@@ -43,12 +44,12 @@ help: ## Mostra esta mensagem de ajuda
 
 build: ## Compila o binário único de produção (home)
 	@mkdir -p bin
-	@go build -o $(BINARY_PATH) ./home
+	@CGO_ENABLED=0 go build -o $(BINARY_PATH) ./home
 
 build-prod: ## Compila o binário otimizado para produção
 	@echo -e "$(GREEN)A compilar [$(BUILD_HASH)]...$(NC)"
 	@mkdir -p bin
-	@go build -ldflags="$(LDFLAGS_PROD)" -trimpath -o $(BINARY_PATH) ./home
+	@CGO_ENABLED=0 go build -ldflags="$(LDFLAGS_PROD)" -trimpath -o $(BINARY_PATH) ./home
 
 run-dev: ## Corre em modo dev (GIN_MODE=debug, go run)
 	@GIN_MODE=debug go run ./home
@@ -143,10 +144,20 @@ deploy: build-prod ## Sync para produção: build + upload + instalação atómi
 	@if [ -z "$(DEPLOY_HOST)" ]; then echo -e "$(RED)Erro: define DEPLOY_HOST=<host> (make deploy DEPLOY_HOST=...)$(NC)"; exit 1; fi
 	@./scripts/deploy.sh
 
-deploy-restart: ## Reinicia o serviço remoto e verifica disponibilidade via health check
+deploy-start: ## Arranca o serviço remoto (OpenRC)
+	@if [ -z "$(DEPLOY_HOST)" ]; then echo -e "$(RED)Erro: define DEPLOY_HOST=<host>$(NC)"; exit 1; fi
+	@echo -e "$(YELLOW)A arrancar $(DEPLOY_SERVICE) em $(DEPLOY_HOST)...$(NC)"
+	@ssh -t -o StrictHostKeyChecking=no $(DEPLOY_HOST) "rc-service $(DEPLOY_SERVICE) start"
+
+deploy-stop: ## Para o serviço remoto (OpenRC)
+	@if [ -z "$(DEPLOY_HOST)" ]; then echo -e "$(RED)Erro: define DEPLOY_HOST=<host>$(NC)"; exit 1; fi
+	@echo -e "$(YELLOW)A parar $(DEPLOY_SERVICE) em $(DEPLOY_HOST)...$(NC)"
+	@ssh -t -o StrictHostKeyChecking=no $(DEPLOY_HOST) "rc-service $(DEPLOY_SERVICE) stop"
+
+deploy-restart: ## Reinicia o serviço remoto (OpenRC) e verifica disponibilidade via health check
 	@if [ -z "$(DEPLOY_HOST)" ]; then echo -e "$(RED)Erro: define DEPLOY_HOST=<host>$(NC)"; exit 1; fi
 	@echo -e "$(YELLOW)A reiniciar $(DEPLOY_SERVICE) em $(DEPLOY_HOST)...$(NC)"
-	@ssh -t -o StrictHostKeyChecking=no $(DEPLOY_HOST) "sudo systemctl restart $(DEPLOY_SERVICE)"
+	@ssh -t -o StrictHostKeyChecking=no $(DEPLOY_HOST) "rc-service $(DEPLOY_SERVICE) restart"
 	@echo -e "$(GREEN)Serviço reiniciado. A verificar disponibilidade...$(NC)"
 	@for i in $$(seq 1 15); do \
 		STATUS=$$(curl -s -o /dev/null -w '%{http_code}' --max-time 4 $(HEALTH_URL) 2>/dev/null || echo 000); \
@@ -160,11 +171,11 @@ deploy-restart: ## Reinicia o serviço remoto e verifica disponibilidade via hea
 		fi; \
 	done
 
-deploy-status: ## Estado e últimos logs do serviço remoto
+deploy-status: ## Estado e últimas linhas de log do serviço remoto
 	@if [ -z "$(DEPLOY_HOST)" ]; then echo -e "$(RED)Erro: define DEPLOY_HOST=<host>$(NC)"; exit 1; fi
 	@ssh -t -o StrictHostKeyChecking=no $(DEPLOY_HOST) \
-		"sudo systemctl status $(DEPLOY_SERVICE) --no-pager -l; echo; sudo journalctl -u $(DEPLOY_SERVICE) -n 20 --no-pager"
+		"rc-service $(DEPLOY_SERVICE) status; echo; tail -n 20 /var/log/caetano/*.log 2>/dev/null"
 
 deploy-logs: ## Segue os logs em tempo real do serviço remoto
 	@if [ -z "$(DEPLOY_HOST)" ]; then echo -e "$(RED)Erro: define DEPLOY_HOST=<host>$(NC)"; exit 1; fi
-	@ssh -t -o StrictHostKeyChecking=no $(DEPLOY_HOST) "sudo journalctl -u $(DEPLOY_SERVICE) -f"
+	@ssh -t -o StrictHostKeyChecking=no $(DEPLOY_HOST) "tail -F /var/log/caetano/*.log"

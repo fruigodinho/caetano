@@ -210,6 +210,30 @@
     border-color: var(--cae-color-primary);
 }
 
+.cae-acl-group {
+    border: 1px solid var(--cae-gray-300);
+    border-radius: var(--cae-radius-sm);
+    padding: var(--cae-space-2) var(--cae-space-3);
+    margin-bottom: var(--cae-space-2);
+}
+
+.cae-acl-group legend {
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--cae-gray-700);
+    padding: 0 var(--cae-space-1);
+}
+
+.cae-checkbox {
+    display: block;
+    font-weight: normal;
+    margin-bottom: var(--cae-space-1);
+}
+
+.cae-checkbox input {
+    margin-right: var(--cae-space-1);
+}
+
 .cae-table {
     width: 100%;
     border-collapse: collapse;
