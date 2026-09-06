@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/fruigodinho/caetano/core/acl"
+	"github.com/fruigodinho/caetano/core/auth"
 	"github.com/fruigodinho/caetano/saldos-esperados/internal/adapter/storage/postgres"
 	"github.com/fruigodinho/caetano/saldos-esperados/internal/service"
 	"github.com/gin-gonic/gin"
@@ -17,14 +19,40 @@ type BalancesHandler struct {
 	queries      *postgres.Queries
 	db           *sql.DB
 	auditService *service.AuditService
+	acl          *acl.Store
+	app          string
+	manageArea   string
 }
 
-func NewBalancesHandler(db *sql.DB) *BalancesHandler {
+// NewBalancesHandler cria o handler. app/manageArea identificam a área
+// "gestão" perante a ACL, para List poder indicar ao template se o
+// utilizador corrente pode ver os botões de edição (Novo, Editar, Eliminar,
+// Importar) - o backend continua a ser a autorização real, via
+// core/middleware.RequireArea nas rotas; isto é só para a UI não oferecer
+// ações que o pedido seguinte iria recusar.
+func NewBalancesHandler(db *sql.DB, aclStore *acl.Store, app, manageArea string) *BalancesHandler {
 	return &BalancesHandler{
 		queries:      postgres.New(db),
 		db:           db,
 		auditService: service.NewAuditService(db),
+		acl:          aclStore,
+		app:          app,
+		manageArea:   manageArea,
 	}
+}
+
+// canManage indica se o utilizador do pedido corrente tem a área de gestão
+// (escrita) desta lista, para a UI decidir se mostra os botões de edição.
+func (h *BalancesHandler) canManage(c *gin.Context) bool {
+	ac, ok := auth.From(c)
+	if !ok {
+		return false
+	}
+	allowed, err := h.acl.Allowed(c.Request.Context(), ac.Principal, h.app, h.manageArea)
+	if err != nil {
+		return false
+	}
+	return allowed
 }
 
 // processSearchTerm converts user wildcards to SQL wildcards.
@@ -94,6 +122,7 @@ func (h *BalancesHandler) List(c *gin.Context) {
 		"Search":     search,
 		"TypeFilter": typeFilter,
 		"Types":      types,
+		"CanManage":  h.canManage(c),
 	}))
 }
 

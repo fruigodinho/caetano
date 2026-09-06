@@ -154,6 +154,12 @@
     cursor: pointer;
 }
 
+.cae-btn:disabled {
+    background: var(--cae-gray-300);
+    color: var(--cae-gray-500);
+    cursor: not-allowed;
+}
+
 .cae-btn:hover {
     background: var(--cae-color-primary-dark);
     text-decoration: none;

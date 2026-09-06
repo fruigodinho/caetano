@@ -2,8 +2,13 @@
 <div class="cae-page-header">
     <h1>Saldos esperados</h1>
     <div style="display: flex; gap: var(--cae-space-2);">
+        {{if .CanManage}}
         <a href="/saldos-esperados/balances/new" class="cae-btn">➕ Novo saldo</a>
         <button type="button" class="cae-btn cae-btn--secondary" onclick="document.getElementById('import-modal').hidden = false">📥 Importar Excel</button>
+        {{else}}
+        <button type="button" class="cae-btn" disabled title="Sem permissão de gestão">➕ Novo saldo</button>
+        <button type="button" class="cae-btn cae-btn--secondary" disabled title="Sem permissão de gestão">📥 Importar Excel</button>
+        {{end}}
     </div>
 </div>
 
@@ -47,11 +52,16 @@
                     <td><span class="cae-badge">{{.ExpectedBalanceType}}</span></td>
                     <td class="cae-table__actions">
                         <div class="cae-table__actions-group">
+                            {{if $.CanManage}}
                             <a href="/saldos-esperados/balances/{{.AccountNumber}}" class="cae-btn cae-btn--secondary">✏️ Editar</a>
                             <form action="/saldos-esperados/balances/{{.AccountNumber}}/delete" method="POST"
                                 onsubmit="return confirm('Tem a certeza?');">
                                 <button type="submit" class="cae-btn cae-btn--danger">🗑️ Eliminar</button>
                             </form>
+                            {{else}}
+                            <button type="button" class="cae-btn cae-btn--secondary" disabled title="Sem permissão de gestão">✏️ Editar</button>
+                            <button type="button" class="cae-btn cae-btn--danger" disabled title="Sem permissão de gestão">🗑️ Eliminar</button>
+                            {{end}}
                         </div>
                     </td>
                 </tr>

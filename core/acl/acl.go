@@ -108,6 +108,18 @@ type Area struct {
 	Active bool
 }
 
+// Allowed é a verificação de autorização para uso fora de RequireArea (ex.:
+// UI condicional num handler) - trata admin como sempre autorizado, tal como
+// RequireArea, delegando em HasAccess para os restantes casos. HasAccess
+// fica deliberadamente sem este bypass (ver o seu comentário); esta função é
+// o segundo (e único outro) sítio onde a regra de admin deve ser aplicada.
+func (s *Store) Allowed(ctx context.Context, p auth.Principal, app, areaKey string) (bool, error) {
+	if p.IsAdmin() {
+		return true, nil
+	}
+	return s.HasAccess(ctx, p, app, areaKey)
+}
+
 // ListActiveAreas devolve as áreas ativas, ordenadas por app e depois por chave.
 func (s *Store) ListActiveAreas(ctx context.Context) ([]Area, error) {
 	const q = `SELECT id, app, area_key, label, active FROM core_acl_areas WHERE active ORDER BY app, area_key`

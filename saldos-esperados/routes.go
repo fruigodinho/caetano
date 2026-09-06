@@ -67,7 +67,7 @@ func RegisterRoutes(rg *gin.RouterGroup, store *acl.Store, db *sql.DB) {
 	dashboardHandler := handler.NewDashboardHandler(db)
 	dataHandler := handler.NewDataHandler(db)
 	typesHandler := handler.NewTypesHandler(db)
-	balancesHandler := handler.NewBalancesHandler(db)
+	balancesHandler := handler.NewBalancesHandler(db, store, AppName, AreaBalancesManage)
 	processingsHandler := handler.NewProcessingsHandler(db)
 	auditHandler := handler.NewAuditHandler(db)
 
@@ -94,13 +94,13 @@ func RegisterRoutes(rg *gin.RouterGroup, store *acl.Store, db *sql.DB) {
 
 	balancesView := rg.Group("", middleware.RequireArea(store, AppName, AreaBalancesView))
 	balancesView.GET("/balances", balancesHandler.List)
-	balancesView.POST("/balances/import", balancesHandler.Import)
 
 	balancesManage := rg.Group("/balances", middleware.RequireArea(store, AppName, AreaBalancesManage))
 	balancesManage.GET("/new", balancesHandler.ShowForm)
 	balancesManage.GET("/:account", balancesHandler.ShowForm)
 	balancesManage.POST("", balancesHandler.Save)
 	balancesManage.POST("/:account/delete", balancesHandler.Delete)
+	balancesManage.POST("/import", balancesHandler.Import)
 
 	history := rg.Group("", middleware.RequireArea(store, AppName, AreaHistory))
 	history.GET("/history", processingsHandler.List)
